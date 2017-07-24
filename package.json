@@ -1,0 +1,29 @@
+{
+  "name": "url-shortener-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barend-erasmus/url-shortener-service.git"
+  },
+  "author": "Barend Erasmus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/barend-erasmus/url-shortener-service/issues"
+  },
+  "homepage": "https://github.com/barend-erasmus/url-shortener-service#readme",
+  "dependencies": {
+    "co": "^4.6.0",
+    "pg": "^6.4.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.15",
+    "@types/sequelize": "^4.0.66"
+  }
+}
