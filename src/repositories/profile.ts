@@ -1,28 +1,15 @@
 // Imports
 import * as co from 'co';
-import * as Sequelize from 'sequelize';
-
+import { BaseRepository } from './base';
 
 // Imports models
 import { Profile } from './../entities/profile';
+import { Url } from './../models/url';
 
-export class ProfileRepository {
+export class ProfileRepository extends BaseRepository {
 
-    private sequelize: Sequelize.Sequelize = null;
-    private models: { Profile: any, Url: any} = null;
-
-    constructor(private host: string, private username: string, private password: string) {
-        this.sequelize = new Sequelize('url-shortener-db', username, password, {
-            host: host,
-            dialect: 'postgres',
-            pool: {
-                max: 5,
-                min: 0,
-                idle: 10000
-            }
-        });
-
-        this.defineModels();
+    constructor(host: string, username: string, password: string) {
+        super(host, username, password);
     }
 
     public insert(profile: Profile): Promise<Profile> {
@@ -39,50 +26,21 @@ export class ProfileRepository {
         });
     }
 
-    public sync(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            this.sequelize.sync({ force: true }).then(() => {
-                resolve();
+    public find(key: string): Promise<Profile> {
+        const self = this;
+
+        return co(function* () {
+
+            const profile = yield self.models.Profile.find({
+                where: {
+                    key: key
+                },
+                include: [
+                    { model: self.models.Url, required: true }
+                ]
             });
+
+            return new Profile(profile.name, profile.key, profile.urls.map((x) => new Url(x.name, x.shortUrl, x.url)));
         });
-    }
-
-    public close(): void {
-        this.sequelize.close();
-    }
-
-    private defineModels(): void {
-        const Profile = this.sequelize.define('profile', {
-            name: {
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            key: {
-                type: Sequelize.STRING,
-                allowNull: false
-            }
-        });
-
-        const Url = this.sequelize.define('url', {
-            name: {
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            shortUrl: {
-                type: Sequelize.STRING,
-                allowNull: false
-            },
-            url: {
-                type: Sequelize.STRING,
-                allowNull: false
-            }
-        });
-
-        Profile.hasMany(Url);
-
-        this.models = {
-            Profile: Profile,
-            Url: Url
-        };
     }
 }

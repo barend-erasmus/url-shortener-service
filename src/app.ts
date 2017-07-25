@@ -1,6 +1,10 @@
 import * as co from 'co';
 import { ProfileRepository } from './repositories/profile';
+import { UrlRepository } from './repositories/url';
 import { ProfileService } from './services/profile';
+
+import { Url } from './entities/url';
+import { Profile } from './models/profile';
 
 co(function* () {
 
@@ -9,12 +13,11 @@ co(function* () {
   const password = '3evS*E6sBj&!S#u_';
 
   const profileRepository = new ProfileRepository(host, username, password);
+  const urlRepository = new UrlRepository(host, username, password);
   const profileService = new ProfileService(profileRepository);
 
-  yield profileRepository.sync();
-
-  yield profileService.create('Barend-Test-1');
-
+  const a = yield profileRepository.find('yVSs6FhJ');
+  console.log(a);
   profileRepository.close();
 })
 
