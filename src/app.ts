@@ -1,26 +1,76 @@
-import * as co from 'co';
-import { ProfileRepository } from './repositories/profile';
-import { UrlRepository } from './repositories/url';
-import { ProfileService } from './services/profile';
+// Imports
+import * as path from 'path';
+import express = require("express");
 
-import { Url } from './entities/url';
-import { Profile } from './models/profile';
+// Imports middleware
+import * as cors from 'cors';
+import bodyParser = require('body-parser');
+import expressWinston = require('express-winston');
 
-co(function* () {
+// Imports routes
+import { ProfileRouter } from './routes/profile';
 
-  const host = 'developersworkspace.co.za';
-  const username = 'url-shortener-service';
-  const password = '3evS*E6sBj&!S#u_';
+// Imports logger
+import { logger } from './logger';
 
-  const profileRepository = new ProfileRepository(host, username, password);
-  const urlRepository = new UrlRepository(host, username, password);
-  const profileService = new ProfileService(profileRepository);
+// Import configurations
+let config = require('./config').config;
 
-  const a = yield profileRepository.find('yVSs6FhJ');
-  console.log(a);
-  profileRepository.close();
-})
+const argv = require('yargs').argv;
 
+if (argv.prod) {
+    config = require('./config.prod').config;
+}
 
+export class UrlShortenerServiceApi {
 
+    constructor(private app: express.Express, private port: number) {
+        this.configureMiddleware(app);
+        this.configureRoutes(app);
+        this.configureErrorHandling(app);
+    }
 
+    public getApp() {
+        return this.app;
+    }
+
+    public run() {
+        this.app.listen(this.port);
+    }
+
+    private configureMiddleware(app: express.Express) {
+
+        // Configure body-parser
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({ extended: false }));
+
+        // Configure CORS
+        app.use(cors());
+
+        // Configure express-winston
+        app.use(expressWinston.logger({
+            meta: false,
+            msg: 'HTTP Request: {{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}} {{req.ip}}',
+            winstonInstance: logger,
+        }));
+
+        app.use('/apidoc', express.static(path.join(__dirname, './../apidoc')));
+    }
+
+    private configureRoutes(app: express.Express) {
+        app.get(`/api/profile`, ProfileRouter.get);
+    }
+
+    private configureErrorHandling(app: express.Express) {
+        app.use((err: Error, req: express.Request, res: express.Response, next: () => void) => {
+            logger.error(err.message, err);
+            res.status(500).send(err.message);
+        });
+    }
+}
+
+const port = argv.port || 3000;
+const api = new UrlShortenerServiceApi(express(), port);
+api.run();
+
+logger.info(`listening on ${port}`);

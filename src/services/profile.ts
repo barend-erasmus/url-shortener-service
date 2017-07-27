@@ -12,6 +12,14 @@ export class ProfileService {
 
     }
 
+    public get(key: string): Promise<Profile> {
+        const self = this;
+        return co(function* () {
+            const profile = yield self.profileRepository.find(key);
+            return profile;
+        });
+    }
+
     public create(name: string): Promise<Profile> {
         const self = this;
         return co(function* () {
