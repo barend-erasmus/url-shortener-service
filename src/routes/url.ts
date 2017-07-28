@@ -11,7 +11,7 @@ import { ProfileRepository } from './../repositories/profile';
 import { UrlService } from './../services/url';
 
 // Imports models
-import { Url } from './../models/url';
+import { Url } from './../entities/url';
 
 export class UrlRouter {
 
@@ -26,7 +26,6 @@ export class UrlRouter {
      * @apiSuccess {String} shortUrl Short Url of the Url
      * @apiSuccess {String} url Url of the Url
      * @apiSuccess {Object[]} clicks Clicks of the Url
-     * @apiSuccess {Object} profile Profile of the Url
      * 
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
@@ -38,11 +37,7 @@ export class UrlRouter {
      *                      "referer": "http://something.com",
      *                      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
      *                      "acceptLanguage": "en-US,en;q=0.8"
-     *                   }],
-     *        "profile": {
-     *                      "name": "My Company",
-     *                      "key": "yVSs6FhJ" 
-     *                   }
+     *                   }]
      *     }
      * 
      * @apiErrorExample {json} Error-Response:
@@ -88,7 +83,6 @@ export class UrlRouter {
      * @apiSuccess {String} shortUrl Short Url of the Url
      * @apiSuccess {String} url Url of the Url
      * @apiSuccess {Object[]} clicks Clicks of the Url
-     * @apiSuccess {Object} profile Profile of the Url
      * 
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
@@ -100,11 +94,7 @@ export class UrlRouter {
      *                      "referer": "http://something.com",
      *                      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
      *                      "acceptLanguage": "en-US,en;q=0.8"
-     *                   }],
-     *        "profile": {
-     *                      "name": "My Company",
-     *                      "key": "yVSs6FhJ" 
-     *                   }
+     *                   }]
      *     }
      * 
      * @apiErrorExample {json} Error-Response:

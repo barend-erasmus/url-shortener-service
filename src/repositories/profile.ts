@@ -4,7 +4,6 @@ import { BaseRepository } from './base';
 
 // Imports models
 import { Profile } from './../entities/profile';
-import { Url } from './../models/url';
 
 export class ProfileRepository extends BaseRepository {
 
@@ -34,17 +33,14 @@ export class ProfileRepository extends BaseRepository {
             const profile = yield BaseRepository.models.Profile.find({
                 where: {
                     key: key
-                },
-                include: [
-                    { model: BaseRepository.models.Url, required: false }
-                ]
+                }
             });
             
             if (!profile) {
                 return null;
             }
 
-            return new Profile(profile.name, profile.key, profile.urls.map((x) => new Url(x.name, x.shortUrl, x.url)));
+            return new Profile(profile.name, profile.key);
         });
     }
 }

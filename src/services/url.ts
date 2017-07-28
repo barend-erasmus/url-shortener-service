@@ -3,7 +3,7 @@ import * as co from 'co';
 
 // Imports models
 import { Url } from './../entities/url';
-import { Profile } from './../models/profile';
+import { Profile } from './../entities/profile';
 import { Click } from './../models/click';
 
 // Imports repositories
@@ -20,6 +20,11 @@ export class UrlService {
         const self = this;
         return co(function* () {
 
+            const format = new RegExp(/^([a-z]|-)+$/);
+            if (!format.test(shortUrl)) {
+                throw new Error('ShortUrl invalid format.');
+            }
+
             const existingUrl = yield self.urlRepository.find(shortUrl);
 
             if (existingUrl) {
@@ -32,9 +37,9 @@ export class UrlService {
                 throw new Error('Profile does not exist.');
             }
 
-            const result = new Url(name, shortUrl, url, [], new Profile(null, key));
+            const result = new Url(name, shortUrl, url, []);
 
-            yield self.urlRepository.insert(result);
+            yield self.urlRepository.insert(result, key);
 
             return result;
         });
@@ -51,8 +56,10 @@ export class UrlService {
     public getWithClick(shortUrl: string, referer: string, userAgent: string, acceptLanguage: string): Promise<Url> {
         const self = this;
         return co(function* () {
-            yield self.urlRepository.insertClick(new Click(referer, userAgent, acceptLanguage), shortUrl);
-            const url = yield self.urlRepository.find(shortUrl);
+            const url: Url = yield self.urlRepository.find(shortUrl);
+            url.clicks.push(new Click(null, referer, userAgent, acceptLanguage));
+
+            yield self.urlRepository.update(url);
             return url;
         });
     }

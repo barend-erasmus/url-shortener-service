@@ -10,7 +10,7 @@ import { ProfileRepository } from './../repositories/profile';
 import { ProfileService } from './../services/profile';
 
 // Imports models
-import { Profile } from './../models/profile';
+import { Profile } from './../entities/profile';
 
 export class ProfileRouter {
 
@@ -29,12 +29,7 @@ export class ProfileRouter {
      *     HTTP/1.1 200 OK
      *     {
      *       "name": "My Company",
-     *       "key": "yVSs6FhJ",
-     *       "urls": [{
-     *                  "name": "My Test Site",
-     *                  "shortUrl": "My-Test-Site",
-     *                  "url": "http://example.com/hello-world"
-     *               }]
+     *       "key": "yVSs6FhJ"
      *     }
      * 
      * @apiErrorExample {json} Error-Response:
@@ -80,8 +75,7 @@ export class ProfileRouter {
      *     HTTP/1.1 200 OK
      *     {
      *       "name": "My Company",
-     *       "key": "yVSs6FhJ",
-     *       "urls": []
+     *       "key": "yVSs6FhJ"
      *     }
      * 
      * @apiErrorExample {json} Error-Response:
