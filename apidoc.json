@@ -4,5 +4,5 @@
   "description": "URL Shorthener Service developed by Developer's Workspace",
   "title": "URL Shorthener Service | Developer's Workspace",
   "url" : "https://url-shortener.openservices.co.za",
-  "sampleUrl": "http://localhost:3000"
+  "sampleUrl": "https://url-shortener.openservices.co.za"
 }

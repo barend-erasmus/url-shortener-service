@@ -1,0 +1,35 @@
+{
+    "machine": {
+        "host": "$host",
+        "username": "$username",
+        "password": "$password"
+    },
+    "commands": [
+        "sudo apt-get update",
+        "curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -",
+        "sudo apt-get install -y nodejs",
+
+        "npm install pm2 -g",
+
+        "mkdir /logs",
+        "npm --prefix /opt/url-shortener-service install",
+        "pm2 stop url-shortener-service",
+        "pm2 start /opt/url-shortener-service/src/app.js --name url-shortener-service -- --prod --port 9004"
+    ],
+    "directories": [
+        {
+            "source": "$workspace/src",
+            "destination": "/opt/url-shortener-service/src"
+        },
+        {
+            "source": "$workspace/apidoc",
+            "destination": "/opt/url-shortener-service/apidoc"
+        }
+    ],
+    "files": [
+        {
+            "source": "$workspace/package.json",
+            "destination": "/opt/url-shortener-service/package.json"
+        }
+    ]
+}
