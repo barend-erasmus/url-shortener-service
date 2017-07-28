@@ -19,13 +19,13 @@ export class ProfileRouter {
      * @apiName GetProfile
      * @apiGroup Profile
      *     
-     * @apiParam {String} key Profile Key
+     * @apiParam {String} key Key of the Profile
      *
-     * @apiSuccess {String} name Name of Profile.
-     * @apiSuccess {String} key Key of Profile.
-     * @apiSuccess {Object[]} urls List of Urls.
+     * @apiSuccess {String} name Name of the Profile
+     * @apiSuccess {String} key Key of the Profile
+     * @apiSuccess {Object[]} urls Urls of the Profile
      * 
-     * @apiSuccessExample Success-Response:
+     * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *       "name": "My Company",
@@ -34,21 +34,81 @@ export class ProfileRouter {
      *                  "name": "My Test Site",
      *                  "shortUrl": "My-Test-Site",
      *                  "url": "http://example.com/hello-world"
-     *              }]
+     *               }]
      *     }
+     * 
+     * @apiErrorExample {json} Error-Response:
+     *      HTTP/1.1 400 Bad Request
+     *      {
+     *          "message": "Your request was not understood"
+     *      }
      */
     public static get(req: Request, res: Response, next: () => void) {
 
         co(function* () {
 
-            const host = 'developersworkspace.co.za';
-            const username = 'url-shortener-service';
-            const password = '3evS*E6sBj&!S#u_';
-            const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
-            const profileService: ProfileService = new ProfileService(profileRepository);
-            const profile: Profile = yield profileService.get(req.query.key);
+            try {
+                const host = 'developersworkspace.co.za';
+                const username = 'url-shortener-service';
+                const password = '3evS*E6sBj&!S#u_';
+                const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
+                const profileService: ProfileService = new ProfileService(profileRepository);
+                const profile: Profile = yield profileService.get(req.query.key);
 
-            res.json(profile);
+                res.json(profile);
+
+            } catch (err) {
+                res.status(400).json({
+                    message: err.message
+                });
+            }
+        });
+    }
+
+    /**
+     * @api {post} /api/profile Create Profile 
+     * @apiName CreateProfile
+     * @apiGroup Profile
+     *     
+     * @apiParam {String} name Name of the Profile
+     *
+     * @apiSuccess {String} name Name of the Profile
+     * @apiSuccess {String} key Key of the Profile.
+     * @apiSuccess {Object[]} urls Urls of the Profile
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "name": "My Company",
+     *       "key": "yVSs6FhJ",
+     *       "urls": []
+     *     }
+     * 
+     * @apiErrorExample {json} Error-Response:
+     *      HTTP/1.1 400 Bad Request
+     *      {
+     *          "message": "Your request was not understood"
+     *      }
+     */
+    public static post(req: Request, res: Response, next: () => void) {
+
+        co(function* () {
+
+            try {
+                const host = 'developersworkspace.co.za';
+                const username = 'url-shortener-service';
+                const password = '3evS*E6sBj&!S#u_';
+                const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
+                const profileService: ProfileService = new ProfileService(profileRepository);
+                const profile: Profile = yield profileService.create(req.body.name);
+
+                res.json(profile);
+
+            } catch (err) {
+                res.status(400).json({
+                    message: err.message
+                });
+            }
         });
     }
 }

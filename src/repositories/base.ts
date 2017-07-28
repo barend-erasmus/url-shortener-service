@@ -2,37 +2,40 @@
 import * as Sequelize from 'sequelize';
 
 export class BaseRepository {
-    protected sequelize: Sequelize.Sequelize = null;
-    protected models: { Profile: Sequelize.Model<{}, {}>, Url: Sequelize.Model<{}, {}> } = null;
+    protected static sequelize: Sequelize.Sequelize = null;
+    protected static models: { Profile: Sequelize.Model<{}, {}>, Url: Sequelize.Model<{}, {}>, Click: Sequelize.Model<{}, {}> } = null;
 
     constructor(private host: string, private username: string, private password: string) {
-        this.sequelize = new Sequelize('url-shortener-db', username, password, {
-            host: host,
-            dialect: 'postgres',
-            pool: {
-                max: 5,
-                min: 0,
-                idle: 10000
-            }
-        });
 
-        this.defineModels();
+        if (!BaseRepository.sequelize) {
+            BaseRepository.sequelize = new Sequelize('url-shortener-db', username, password, {
+                host: host,
+                dialect: 'postgres',
+                pool: {
+                    max: 5,
+                    min: 0,
+                    idle: 10000
+                }
+            });
+
+            BaseRepository.defineModels();
+        }
     }
 
     public sync(): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.sequelize.sync({ force: true }).then(() => {
+            BaseRepository.sequelize.sync({ force: true }).then(() => {
                 resolve();
             });
         });
     }
 
     public close(): void {
-        this.sequelize.close();
+        BaseRepository.sequelize.close();
     }
 
-    private defineModels(): void {
-        const Profile = this.sequelize.define('profile', {
+    private static defineModels(): void {
+        const Profile = BaseRepository.sequelize.define('profile', {
             name: {
                 type: Sequelize.STRING,
                 allowNull: false
@@ -43,7 +46,7 @@ export class BaseRepository {
             }
         });
 
-        const Url = this.sequelize.define('url', {
+        const Url = BaseRepository.sequelize.define('url', {
             name: {
                 type: Sequelize.STRING,
                 allowNull: false
@@ -58,11 +61,31 @@ export class BaseRepository {
             }
         });
 
+        const Click = BaseRepository.sequelize.define('click', {
+            referer: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            userAgent: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            acceptLanguage: {
+                type: Sequelize.STRING,
+                allowNull: false
+            }
+        });
+
         Profile.hasMany(Url);
+        Url.belongsTo(Profile);
+        
+        Url.hasMany(Click);
+        Click.belongsTo(Url);
 
         this.models = {
             Profile: Profile,
-            Url: Url
+            Url: Url,
+            Click: Click
         };
     }
 }

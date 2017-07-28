@@ -15,9 +15,9 @@ export class ProfileRepository extends BaseRepository {
     public insert(profile: Profile): Promise<Profile> {
         const self = this;
         return co(function* () {
-            yield self.sequelize.authenticate();
+            yield BaseRepository.sequelize.authenticate();
 
-            yield self.models.Profile.create({
+            yield BaseRepository.models.Profile.create({
                 name: profile.name,
                 key: profile.key
             });
@@ -31,14 +31,18 @@ export class ProfileRepository extends BaseRepository {
 
         return co(function* () {
 
-            const profile = yield self.models.Profile.find({
+            const profile = yield BaseRepository.models.Profile.find({
                 where: {
                     key: key
                 },
                 include: [
-                    { model: self.models.Url, required: true }
+                    { model: BaseRepository.models.Url, required: false }
                 ]
             });
+            
+            if (!profile) {
+                return null;
+            }
 
             return new Profile(profile.name, profile.key, profile.urls.map((x) => new Url(x.name, x.shortUrl, x.url)));
         });

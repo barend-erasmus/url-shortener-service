@@ -1,8 +1,8 @@
 {
-  "name": "example",
-  "version": "0.1.0",
-  "description": "apiDoc basic example",
-  "title": "Custom apiDoc browser title",
+  "name": "URL Shorthener Service",
+  "version": "1.0.0",
+  "description": "URL Shorthener Service developed by Developer's Workspace",
+  "title": "URL Shorthener Service | Developer's Workspace",
   "url" : "https://url-shortener.openservices.co.za",
   "sampleUrl": "http://localhost:3000"
 }

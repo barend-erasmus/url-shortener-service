@@ -23,7 +23,7 @@ export class ProfileService {
     public create(name: string): Promise<Profile> {
         const self = this;
         return co(function* () {
-            const profile = new Profile(name, self.generateKey(), null);
+            const profile = new Profile(name, self.generateKey(), []);
 
             yield self.profileRepository.insert(profile);
 

@@ -9,6 +9,7 @@ import expressWinston = require('express-winston');
 
 // Imports routes
 import { ProfileRouter } from './routes/profile';
+import { UrlRouter } from './routes/url';
 
 // Imports logger
 import { logger } from './logger';
@@ -54,11 +55,15 @@ export class UrlShortenerServiceApi {
             winstonInstance: logger,
         }));
 
-        app.use('/apidoc', express.static(path.join(__dirname, './../apidoc')));
+        app.use('/api/docs', express.static(path.join(__dirname, './../apidoc')));
     }
 
     private configureRoutes(app: express.Express) {
         app.get(`/api/profile`, ProfileRouter.get);
+        app.post(`/api/profile`, ProfileRouter.post);
+        app.get(`/api/url`, UrlRouter.get);
+        app.post(`/api/url`, UrlRouter.post);
+        app.get(`/:shortUrl`, UrlRouter.redirect);
     }
 
     private configureErrorHandling(app: express.Express) {
