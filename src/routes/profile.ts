@@ -48,6 +48,11 @@ export class ProfileRouter {
                 const password = '3evS*E6sBj&!S#u_';
                 const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
                 const profileService: ProfileService = new ProfileService(profileRepository);
+
+                if (!req.query.key) {
+                    throw new Error('Name required');
+                }
+
                 const profile: Profile = yield profileService.get(req.query.key);
 
                 res.json(profile);
@@ -94,6 +99,11 @@ export class ProfileRouter {
                 const password = '3evS*E6sBj&!S#u_';
                 const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
                 const profileService: ProfileService = new ProfileService(profileRepository);
+
+                if (!req.body.key) {
+                    throw new Error('Name required.');
+                }
+
                 const profile: Profile = yield profileService.create(req.body.name);
 
                 res.json(profile);

@@ -57,6 +57,11 @@ export class UrlRouter {
                 const urlRepository: UrlRepository = new UrlRepository(host, username, password);
                 const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
                 const urlService: UrlService = new UrlService(urlRepository, profileRepository);
+
+                if (!req.query.shortUrl) {
+                    throw new Error('Short Url required.');
+                }
+
                 const url: Url = yield urlService.get(req.query.shortUrl);
 
                 res.json(url);
@@ -114,6 +119,23 @@ export class UrlRouter {
                 const urlRepository: UrlRepository = new UrlRepository(host, username, password);
                 const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
                 const urlService: UrlService = new UrlService(urlRepository, profileRepository);
+
+                if (!req.body.name) {
+                    throw new Error('Name required.');
+                }
+
+                if (!req.body.shortUrl) {
+                    throw new Error('Short Url required.');
+                }
+
+                if (!req.body.url) {
+                    throw new Error('Url required.');
+                }
+
+                if (!req.body.key) {
+                    throw new Error('Key required.');
+                }
+
                 const url: Url = yield urlService.create(req.body.name, req.body.shortUrl, req.body.url, req.body.key);
 
                 res.json(url);
@@ -141,6 +163,10 @@ export class UrlRouter {
                 const referer: any = req.headers['referer'] || 'None';
                 const acceptLanguage: any = req.headers['accept-language'];
                 const userAgent: any = req.headers['user-agent'];
+
+                if (!req.params.shortUrl) {
+                    throw new Error('Short Url required.');
+                }
 
                 const url: Url = yield urlService.getWithClick(req.params.shortUrl, referer, userAgent, acceptLanguage);
 

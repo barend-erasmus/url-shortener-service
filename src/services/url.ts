@@ -20,15 +20,15 @@ export class UrlService {
         const self = this;
         return co(function* () {
 
-            const format = new RegExp(/^([a-z]|-)+$/);
+            const format = new RegExp(/^([a-z]|[A-Z]|[0-9]|-)+$/);
             if (!format.test(shortUrl)) {
-                throw new Error('ShortUrl invalid format.');
+                throw new Error('Short Url invalid format.');
             }
 
             const existingUrl = yield self.urlRepository.find(shortUrl);
 
             if (existingUrl) {
-                throw new Error('ShortUrl already exist.');
+                throw new Error('Short Url already exist.');
             }
 
             const profile: Profile = yield self.profileRepository.find(key);
