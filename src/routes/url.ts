@@ -170,7 +170,7 @@ export class UrlRouter {
 
                 const url: Url = yield urlService.getWithClick(req.params.shortUrl, referer, userAgent, acceptLanguage);
 
-                res.redirect(url.url);
+                res.redirect(url.url, 301);
 
             } catch (err) {
                 res.status(400).json({

@@ -100,7 +100,7 @@ export class ProfileRouter {
                 const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
                 const profileService: ProfileService = new ProfileService(profileRepository);
 
-                if (!req.body.key) {
+                if (!req.body.name) {
                     throw new Error('Name required.');
                 }
 

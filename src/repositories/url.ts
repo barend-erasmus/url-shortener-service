@@ -56,8 +56,8 @@ export class UrlRepository extends BaseRepository {
                 throw new Error('Url does not exist.');
             }
 
-            for (const click of existingUrl.clicks) {
-                if (url.clicks.filter((x) => x.id === click.id)) {
+            for (const click of url.clicks) {
+                if (existingUrl.clicks.filter((x) => x.id === click.id).length > 0) {
                     continue;
                 }
 
