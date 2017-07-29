@@ -14,7 +14,7 @@ export class ProfileService {
 
     public get(key: string): Promise<Profile> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
             if (!key) {
                 throw new Error('Key required.');
             }
@@ -27,7 +27,7 @@ export class ProfileService {
 
     public create(name: string): Promise<Profile> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
 
             if (!name) {
                 throw new Error('Name required.');
@@ -42,10 +42,10 @@ export class ProfileService {
     }
 
     private generateKey() {
-        var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let text = "";
+        let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-        for (var i = 0; i < 8; i++)
+        for (let i = 0; i < 8; i++)
             text += possible.charAt(Math.floor(Math.random() * possible.length));
 
         return text;

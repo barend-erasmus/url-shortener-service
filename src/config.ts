@@ -1,5 +1,5 @@
 export let config = {
     logging: {
-        path: './'
-    }
-}
+        path: './',
+    },
+};

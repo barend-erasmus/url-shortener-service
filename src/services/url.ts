@@ -2,8 +2,8 @@
 import * as co from 'co';
 
 // Imports models
-import { Url } from './../entities/url';
 import { Profile } from './../entities/profile';
+import { Url } from './../entities/url';
 import { Click } from './../models/click';
 
 // Imports interfaces
@@ -18,7 +18,7 @@ export class UrlService {
 
     public create(name: string, shortUrl: string, url: string, key: string): Promise<Url> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
 
             if (!name) {
                 throw new Error('Name required.');
@@ -63,7 +63,7 @@ export class UrlService {
 
     public get(shortUrl: string): Promise<Url> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
 
             if (!shortUrl) {
                 throw new Error('Short Url required.');
@@ -76,7 +76,7 @@ export class UrlService {
 
     public getWithClick(shortUrl: string, referer: string, userAgent: string, acceptLanguage: string): Promise<Url> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
 
             if (!shortUrl) {
                 throw new Error('Short Url required.');

@@ -13,12 +13,12 @@ export class ProfileRepository extends BaseRepository {
 
     public insert(profile: Profile): Promise<boolean> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
             yield BaseRepository.sequelize.authenticate();
 
             yield BaseRepository.models.Profile.create({
                 name: profile.name,
-                key: profile.key
+                key: profile.key,
             });
 
             return true;
@@ -27,14 +27,14 @@ export class ProfileRepository extends BaseRepository {
 
     public find(key: string): Promise<Profile> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
 
             const profile = yield BaseRepository.models.Profile.find({
                 where: {
-                    key: key
-                }
+                    key,
+                },
             });
-            
+
             if (!profile) {
                 return null;
             }

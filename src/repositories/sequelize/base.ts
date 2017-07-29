@@ -9,13 +9,13 @@ export class BaseRepository {
 
         if (!BaseRepository.sequelize) {
             BaseRepository.sequelize = new Sequelize('url-shortener-db', username, password, {
-                host: host,
+                host,
                 dialect: 'postgres',
                 pool: {
                     max: 5,
                     min: 0,
-                    idle: 10000
-                }
+                    idle: 10000,
+                },
             });
 
             BaseRepository.defineModels();
@@ -38,54 +38,54 @@ export class BaseRepository {
         const Profile = BaseRepository.sequelize.define('profile', {
             name: {
                 type: Sequelize.STRING,
-                allowNull: false
+                allowNull: false,
             },
             key: {
                 type: Sequelize.STRING,
-                allowNull: false
-            }
+                allowNull: false,
+            },
         });
 
         const Url = BaseRepository.sequelize.define('url', {
             name: {
                 type: Sequelize.STRING,
-                allowNull: false
+                allowNull: false,
             },
             shortUrl: {
                 type: Sequelize.STRING,
-                allowNull: false
+                allowNull: false,
             },
             url: {
                 type: Sequelize.STRING,
-                allowNull: false
-            }
+                allowNull: false,
+            },
         });
 
         const Click = BaseRepository.sequelize.define('click', {
             referer: {
                 type: Sequelize.STRING,
-                allowNull: false
+                allowNull: false,
             },
             userAgent: {
                 type: Sequelize.STRING,
-                allowNull: false
+                allowNull: false,
             },
             acceptLanguage: {
                 type: Sequelize.STRING,
-                allowNull: false
-            }
+                allowNull: false,
+            },
         });
 
         Profile.hasMany(Url);
         Url.belongsTo(Profile);
-        
+
         Url.hasMany(Click);
         Click.belongsTo(Url);
 
         this.models = {
-            Profile: Profile,
-            Url: Url,
-            Click: Click
+            Profile,
+            Url,
+            Click,
         };
     }
 }

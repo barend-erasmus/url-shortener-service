@@ -6,18 +6,18 @@ import { BaseRepository } from './base';
 import { Profile } from './../../entities/profile';
 
 export class ProfileRepository extends BaseRepository {
- 
+
     constructor() {
         super();
     }
 
     public insert(profile: Profile): Promise<boolean> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
 
             BaseRepository.collections.profiles.push({
                 name: profile.name,
-                key: profile.key
+                key: profile.key,
             });
 
             return true;
@@ -26,7 +26,7 @@ export class ProfileRepository extends BaseRepository {
 
     public find(key: string): Promise<Profile> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
 
             const profile = BaseRepository.collections.profiles.find((x) => x.key === key);
 

@@ -1,7 +1,7 @@
 // Imports
+import * as co from 'co';
 import { Express, Request, Response } from "express";
 import * as express from 'express';
-import * as co from 'co';
 
 import { BaseRouter } from './base';
 
@@ -17,14 +17,14 @@ export class UrlRouter {
      * @api {get} /api/url Get Url by ShortUrl
      * @apiName GetUrl
      * @apiGroup Url
-     *     
+     *
      * @apiParam {String} shortUrl Short Url of the Url
      *
      * @apiSuccess {String} name Name of the Url
      * @apiSuccess {String} shortUrl Short Url of the Url
      * @apiSuccess {String} url Url of the Url
      * @apiSuccess {Object[]} clicks Clicks of the Url
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -37,7 +37,7 @@ export class UrlRouter {
      *                      "acceptLanguage": "en-US,en;q=0.8"
      *                   }]
      *     }
-     * 
+     *
      * @apiErrorExample {json} Error-Response:
      *      HTTP/1.1 400 Bad Request
      *      {
@@ -45,7 +45,7 @@ export class UrlRouter {
      *      }
      */
     public static get(req: Request, res: Response, next: () => void) {
-        co(function* () {
+        co(function*() {
 
             try {
 
@@ -55,17 +55,17 @@ export class UrlRouter {
 
             } catch (err) {
                 res.status(400).json({
-                    message: err.message
+                    message: err.message,
                 });
             }
         });
     }
 
     /**
-     * @api {post} /api/url Create Url 
+     * @api {post} /api/url Create Url
      * @apiName CreateUrl
      * @apiGroup Url
-     *     
+     *
      * @apiParam {String} name Url Name
      * @apiParam {String} shortUrl Short Url
      * @apiParam {String} url Url
@@ -75,7 +75,7 @@ export class UrlRouter {
      * @apiSuccess {String} shortUrl Short Url of the Url
      * @apiSuccess {String} url Url of the Url
      * @apiSuccess {Object[]} clicks Clicks of the Url
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -88,7 +88,7 @@ export class UrlRouter {
      *                      "acceptLanguage": "en-US,en;q=0.8"
      *                   }]
      *     }
-     * 
+     *
      * @apiErrorExample {json} Error-Response:
      *      HTTP/1.1 400 Bad Request
      *      {
@@ -96,7 +96,7 @@ export class UrlRouter {
      *      }
      */
     public static post(req: Request, res: Response, next: () => void) {
-        co(function* () {
+        co(function*() {
 
             try {
 
@@ -106,18 +106,18 @@ export class UrlRouter {
 
             } catch (err) {
                 res.status(400).json({
-                    message: err.message
+                    message: err.message,
                 });
             }
         });
     }
 
     public static redirect(req: Request, res: Response, next: () => void) {
-        co(function* () {
+        co(function*() {
 
             try {
 
-                const referer: any = req.headers['referer'] || 'None';
+                const referer: any = req.headers.referer || 'None';
                 const acceptLanguage: any = req.headers['accept-language'];
                 const userAgent: any = req.headers['user-agent'];
 
@@ -127,7 +127,7 @@ export class UrlRouter {
 
             } catch (err) {
                 res.status(400).json({
-                    message: err.message
+                    message: err.message,
                 });
             }
         });

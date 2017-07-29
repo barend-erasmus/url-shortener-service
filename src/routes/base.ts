@@ -24,7 +24,7 @@ export class BaseRouter {
     public static urlService(): UrlService {
         // const urlRepository: UrlRepository = new UrlRepository(BaseRouter.host, BaseRouter.username, BaseRouter.password);
         // const profileRepository: ProfileRepository = new ProfileRepository(BaseRouter.host, BaseRouter.username, BaseRouter.password);
-        
+
         const urlRepository: MemoryUrlRepository = new MemoryUrlRepository();
         const profileRepository: MemoryProfileRepository = new MemoryProfileRepository();
         return new UrlService(urlRepository, profileRepository);

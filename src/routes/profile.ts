@@ -1,7 +1,7 @@
 // Imports
+import * as co from 'co';
 import { Express, Request, Response } from "express";
 import * as express from 'express';
-import * as co from 'co';
 
 import { BaseRouter } from './base';
 
@@ -17,20 +17,20 @@ export class ProfileRouter {
      * @api {get} /api/profile Get Profile by Key
      * @apiName GetProfile
      * @apiGroup Profile
-     *     
+     *
      * @apiParam {String} key Key of the Profile
      *
      * @apiSuccess {String} name Name of the Profile
      * @apiSuccess {String} key Key of the Profile
      * @apiSuccess {Object[]} urls Urls of the Profile
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *       "name": "My Company",
      *       "key": "yVSs6FhJ"
      *     }
-     * 
+     *
      * @apiErrorExample {json} Error-Response:
      *      HTTP/1.1 400 Bad Request
      *      {
@@ -38,7 +38,7 @@ export class ProfileRouter {
      *      }
      */
     public static get(req: Request, res: Response, next: () => void) {
-        co(function* () {
+        co(function*() {
 
             try {
 
@@ -48,30 +48,30 @@ export class ProfileRouter {
 
             } catch (err) {
                 res.status(400).json({
-                    message: err.message
+                    message: err.message,
                 });
             }
         });
     }
 
     /**
-     * @api {post} /api/profile Create Profile 
+     * @api {post} /api/profile Create Profile
      * @apiName CreateProfile
      * @apiGroup Profile
-     *     
+     *
      * @apiParam {String} name Name of the Profile
      *
      * @apiSuccess {String} name Name of the Profile
      * @apiSuccess {String} key Key of the Profile.
      * @apiSuccess {Object[]} urls Urls of the Profile
-     * 
+     *
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *       "name": "My Company",
      *       "key": "yVSs6FhJ"
      *     }
-     * 
+     *
      * @apiErrorExample {json} Error-Response:
      *      HTTP/1.1 400 Bad Request
      *      {
@@ -79,7 +79,7 @@ export class ProfileRouter {
      *      }
      */
     public static post(req: Request, res: Response, next: () => void) {
-        co(function* () {
+        co(function*() {
 
             try {
                 const profile: Profile = yield BaseRouter.profileService().create(req.body.name);
@@ -88,7 +88,7 @@ export class ProfileRouter {
 
             } catch (err) {
                 res.status(400).json({
-                    message: err.message
+                    message: err.message,
                 });
             }
         });

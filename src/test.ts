@@ -4,7 +4,6 @@ import { BaseRepository } from './repositories/sequelize/base';
 // Imports services
 import { ProfileService } from './services/profile';
 
-
 const host = 'developersworkspace.co.za';
 const username = 'url-shortener-service';
 const password = '3evS*E6sBj&!S#u_';

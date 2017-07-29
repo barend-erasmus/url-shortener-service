@@ -14,7 +14,7 @@ export class UrlRepository extends BaseRepository {
 
     public insert(url: Url, key: string): Promise<boolean> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
 
             BaseRepository.collections.urls.push({
                 id: BaseRepository.collections.urls.length + 1,
@@ -22,7 +22,7 @@ export class UrlRepository extends BaseRepository {
                 shortUrl: url.shortUrl,
                 url: url.url,
                 clicks: url.clicks,
-                key: key
+                key,
             });
 
             return true;
@@ -31,7 +31,7 @@ export class UrlRepository extends BaseRepository {
 
     public update(url: Url): Promise<boolean> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
             const existingUrl = BaseRepository.collections.urls.find((x) => x.shortUrl === url.shortUrl);
 
             existingUrl.clicks = url.clicks;
@@ -42,7 +42,7 @@ export class UrlRepository extends BaseRepository {
 
     public find(shortUrl: string): Promise<Url> {
         const self = this;
-        return co(function* () {
+        return co(function*() {
 
             const url = BaseRepository.collections.urls.find((x) => x.shortUrl === shortUrl);
 

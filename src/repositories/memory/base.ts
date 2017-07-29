@@ -5,8 +5,8 @@ export class BaseRepository {
     constructor() {
         if (!BaseRepository.collections) {
             BaseRepository.collections = {
-                profiles:[],
-                urls: []
+                profiles: [],
+                urls: [],
             };
         }
     }
