@@ -1,6 +1,6 @@
 
 export class BaseRepository {
-    public static collections: { profiles: any[], urls: any[] };
+    protected static collections: { profiles: any[], urls: any[] };
 
     constructor() {
         if (!BaseRepository.collections) {
@@ -9,5 +9,12 @@ export class BaseRepository {
                 urls: [],
             };
         }
+    }
+
+    public drop(): void {
+        BaseRepository.collections = {
+            profiles: [],
+            urls: [],
+        };
     }
 }

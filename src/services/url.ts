@@ -83,6 +83,11 @@ export class UrlService {
             }
 
             const url: Url = yield self.urlRepository.find(shortUrl);
+
+            if (!url) {
+                return null;
+            }
+
             url.clicks.push(new Click(null, referer, userAgent, acceptLanguage));
 
             yield self.urlRepository.update(url);

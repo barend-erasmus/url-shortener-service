@@ -18,6 +18,9 @@ describe('ProfileService.create', () => {
 
     beforeEach(() => {
         profileRepository = new ProfileRepository();
+
+        profileRepository.drop();
+        
         profileService = new ProfileService(profileRepository);
     });
 
@@ -60,6 +63,9 @@ describe('ProfileService.get', () => {
 
     beforeEach(() => {
         profileRepository = new ProfileRepository();
+
+        profileRepository.drop();
+
         profileService = new ProfileService(profileRepository);
     });
 
