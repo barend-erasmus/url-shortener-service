@@ -6,19 +6,35 @@ import { Url } from './../entities/url';
 import { Profile } from './../entities/profile';
 import { Click } from './../models/click';
 
-// Imports repositories
-import { ProfileRepository } from './../repositories/profile';
-import { UrlRepository } from './../repositories/url';
+// Imports interfaces
+import { IProfileRepository } from './../repositories/profile';
+import { IUrlRepository } from './../repositories/url';
 
 export class UrlService {
 
-    constructor(private urlRepository: UrlRepository, private profileRepository: ProfileRepository) {
+    constructor(private urlRepository: IUrlRepository, private profileRepository: IProfileRepository) {
 
     }
 
     public create(name: string, shortUrl: string, url: string, key: string): Promise<Url> {
         const self = this;
         return co(function* () {
+
+            if (!name) {
+                throw new Error('Name required.');
+            }
+
+            if (!shortUrl) {
+                throw new Error('Short Url required.');
+            }
+
+            if (!url) {
+                throw new Error('Url required.');
+            }
+
+            if (!key) {
+                throw new Error('Key required.');
+            }
 
             const format = new RegExp(/^([a-z]|[A-Z]|[0-9]|-)+$/);
             if (!format.test(shortUrl)) {
@@ -48,6 +64,11 @@ export class UrlService {
     public get(shortUrl: string): Promise<Url> {
         const self = this;
         return co(function* () {
+
+            if (!shortUrl) {
+                throw new Error('Short Url required.');
+            }
+
             const url = yield self.urlRepository.find(shortUrl);
             return url;
         });
@@ -56,6 +77,11 @@ export class UrlService {
     public getWithClick(shortUrl: string, referer: string, userAgent: string, acceptLanguage: string): Promise<Url> {
         const self = this;
         return co(function* () {
+
+            if (!shortUrl) {
+                throw new Error('Short Url required.');
+            }
+
             const url: Url = yield self.urlRepository.find(shortUrl);
             url.clicks.push(new Click(null, referer, userAgent, acceptLanguage));
 

@@ -3,9 +3,7 @@ import { Express, Request, Response } from "express";
 import * as express from 'express';
 import * as co from 'co';
 
-// Import Repositories
-import { UrlRepository } from './../repositories/url';
-import { ProfileRepository } from './../repositories/profile';
+import { BaseRouter } from './base';
 
 // Imports services
 import { UrlService } from './../services/url';
@@ -47,22 +45,11 @@ export class UrlRouter {
      *      }
      */
     public static get(req: Request, res: Response, next: () => void) {
-
         co(function* () {
 
             try {
-                const host = 'developersworkspace.co.za';
-                const username = 'url-shortener-service';
-                const password = '3evS*E6sBj&!S#u_';
-                const urlRepository: UrlRepository = new UrlRepository(host, username, password);
-                const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
-                const urlService: UrlService = new UrlService(urlRepository, profileRepository);
 
-                if (!req.query.shortUrl) {
-                    throw new Error('Short Url required.');
-                }
-
-                const url: Url = yield urlService.get(req.query.shortUrl);
+                const url: Url = yield BaseRouter.urlService().get(req.query.shortUrl);
 
                 res.json(url);
 
@@ -109,34 +96,11 @@ export class UrlRouter {
      *      }
      */
     public static post(req: Request, res: Response, next: () => void) {
-
         co(function* () {
 
             try {
-                const host = 'developersworkspace.co.za';
-                const username = 'url-shortener-service';
-                const password = '3evS*E6sBj&!S#u_';
-                const urlRepository: UrlRepository = new UrlRepository(host, username, password);
-                const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
-                const urlService: UrlService = new UrlService(urlRepository, profileRepository);
 
-                if (!req.body.name) {
-                    throw new Error('Name required.');
-                }
-
-                if (!req.body.shortUrl) {
-                    throw new Error('Short Url required.');
-                }
-
-                if (!req.body.url) {
-                    throw new Error('Url required.');
-                }
-
-                if (!req.body.key) {
-                    throw new Error('Key required.');
-                }
-
-                const url: Url = yield urlService.create(req.body.name, req.body.shortUrl, req.body.url, req.body.key);
+                const url: Url = yield BaseRouter.urlService().create(req.body.name, req.body.shortUrl, req.body.url, req.body.key);
 
                 res.json(url);
 
@@ -149,28 +113,17 @@ export class UrlRouter {
     }
 
     public static redirect(req: Request, res: Response, next: () => void) {
-
         co(function* () {
 
             try {
-                const host = 'developersworkspace.co.za';
-                const username = 'url-shortener-service';
-                const password = '3evS*E6sBj&!S#u_';
-                const urlRepository: UrlRepository = new UrlRepository(host, username, password);
-                const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
-                const urlService: UrlService = new UrlService(urlRepository, profileRepository);
 
                 const referer: any = req.headers['referer'] || 'None';
                 const acceptLanguage: any = req.headers['accept-language'];
                 const userAgent: any = req.headers['user-agent'];
 
-                if (!req.params.shortUrl) {
-                    throw new Error('Short Url required.');
-                }
+                const url: Url = yield BaseRouter.urlService().getWithClick(req.params.shortUrl, referer, userAgent, acceptLanguage);
 
-                const url: Url = yield urlService.getWithClick(req.params.shortUrl, referer, userAgent, acceptLanguage);
-
-                res.redirect(url.url, 301);
+                res.redirect(301, url.url);
 
             } catch (err) {
                 res.status(400).json({

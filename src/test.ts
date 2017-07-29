@@ -1,5 +1,5 @@
 // Import Repositories
-import { BaseRepository } from './repositories/base';
+import { BaseRepository } from './repositories/sequelize/base';
 
 // Imports services
 import { ProfileService } from './services/profile';

@@ -3,8 +3,7 @@ import { Express, Request, Response } from "express";
 import * as express from 'express';
 import * as co from 'co';
 
-// Import Repositories
-import { ProfileRepository } from './../repositories/profile';
+import { BaseRouter } from './base';
 
 // Imports services
 import { ProfileService } from './../services/profile';
@@ -39,21 +38,11 @@ export class ProfileRouter {
      *      }
      */
     public static get(req: Request, res: Response, next: () => void) {
-
         co(function* () {
 
             try {
-                const host = 'developersworkspace.co.za';
-                const username = 'url-shortener-service';
-                const password = '3evS*E6sBj&!S#u_';
-                const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
-                const profileService: ProfileService = new ProfileService(profileRepository);
 
-                if (!req.query.key) {
-                    throw new Error('Name required');
-                }
-
-                const profile: Profile = yield profileService.get(req.query.key);
+                const profile: Profile = yield BaseRouter.profileService().get(req.query.key);
 
                 res.json(profile);
 
@@ -90,21 +79,10 @@ export class ProfileRouter {
      *      }
      */
     public static post(req: Request, res: Response, next: () => void) {
-
         co(function* () {
 
             try {
-                const host = 'developersworkspace.co.za';
-                const username = 'url-shortener-service';
-                const password = '3evS*E6sBj&!S#u_';
-                const profileRepository: ProfileRepository = new ProfileRepository(host, username, password);
-                const profileService: ProfileService = new ProfileService(profileRepository);
-
-                if (!req.body.name) {
-                    throw new Error('Name required.');
-                }
-
-                const profile: Profile = yield profileService.create(req.body.name);
+                const profile: Profile = yield BaseRouter.profileService().create(req.body.name);
 
                 res.json(profile);
 

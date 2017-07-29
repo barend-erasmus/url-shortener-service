@@ -4,18 +4,23 @@ import * as co from 'co';
 // Imports models
 import { Profile } from './../entities/profile';
 
-// Imports repositories
-import { ProfileRepository } from './../repositories/profile';
+// Imports interfaces
+import { IProfileRepository } from './../repositories/profile';
 
 export class ProfileService {
-    constructor(private profileRepository: ProfileRepository) {
+    constructor(private profileRepository: IProfileRepository) {
 
     }
 
     public get(key: string): Promise<Profile> {
         const self = this;
         return co(function* () {
+            if (!key) {
+                throw new Error('Key required.');
+            }
+
             const profile = yield self.profileRepository.find(key);
+
             return profile;
         });
     }
@@ -23,6 +28,11 @@ export class ProfileService {
     public create(name: string): Promise<Profile> {
         const self = this;
         return co(function* () {
+
+            if (!name) {
+                throw new Error('Name required.');
+            }
+
             const profile = new Profile(name, self.generateKey());
 
             yield self.profileRepository.insert(profile);
