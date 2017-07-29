@@ -4,9 +4,9 @@ import * as path from 'path';
 import * as yargs from 'yargs';
 
 // Imports middleware
-import bodyParser from 'body-parser';
+import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import expressWinston from 'express-winston';
+import * as expressWinston from 'express-winston';
 
 // Imports routes
 import { ProfileRouter } from './routes/profile';
@@ -59,6 +59,7 @@ export class UrlShortenerServiceApi {
         }));
 
         app.use('/api/docs', express.static(path.join(__dirname, './../apidoc')));
+        app.use('/api/coverage', express.static(path.join(__dirname, './../coverage/lcov-report')));
     }
 
     private configureRoutes(app: express.Express) {

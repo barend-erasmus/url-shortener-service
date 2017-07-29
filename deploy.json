@@ -24,6 +24,10 @@
         {
             "source": "$workspace/apidoc",
             "destination": "/opt/url-shortener-service/apidoc"
+        },
+        {
+            "source": "$workspace/coverage",
+            "destination": "/opt/url-shortener-service/coverage"
         }
     ],
     "files": [
