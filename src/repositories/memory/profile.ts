@@ -16,8 +16,8 @@ export class ProfileRepository extends BaseRepository {
         return co(function*() {
 
             BaseRepository.collections.profiles.push({
-                name: profile.name,
                 key: profile.key,
+                name: profile.name,
             });
 
             return true;

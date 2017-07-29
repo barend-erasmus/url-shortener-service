@@ -1,11 +1,12 @@
 // Imports
+import * as express from "express";
 import * as path from 'path';
-import express = require("express");
+import * as yargs from 'yargs';
 
 // Imports middleware
+import bodyParser from 'body-parser';
 import * as cors from 'cors';
-import bodyParser = require('body-parser');
-import expressWinston = require('express-winston');
+import expressWinston from 'express-winston';
 
 // Imports routes
 import { ProfileRouter } from './routes/profile';
@@ -15,12 +16,14 @@ import { UrlRouter } from './routes/url';
 import { logger } from './logger';
 
 // Import configurations
-let config = require('./config').config;
+import { config as devConfig } from './config';
+import { config as prodConfig } from './config.prod';
 
-const argv = require('yargs').argv;
+const argv = yargs.argv;
 
+let config = devConfig;
 if (argv.prod) {
-    config = require('./config.prod').config;
+    config = prodConfig;
 }
 
 export class UrlShortenerServiceApi {
@@ -74,8 +77,7 @@ export class UrlShortenerServiceApi {
     }
 }
 
-const port = argv.port || 3000;
-const api = new UrlShortenerServiceApi(express(), port);
+const api = new UrlShortenerServiceApi(express(), argv.port || 3000);
 api.run();
 
-logger.info(`listening on ${port}`);
+logger.info(`listening on ${argv.port || 3000}`);

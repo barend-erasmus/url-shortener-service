@@ -17,8 +17,8 @@ export class ProfileRepository extends BaseRepository {
             yield BaseRepository.sequelize.authenticate();
 
             yield BaseRepository.models.Profile.create({
-                name: profile.name,
                 key: profile.key,
+                name: profile.name,
             });
 
             return true;

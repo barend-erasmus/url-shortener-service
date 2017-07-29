@@ -1,14 +1,17 @@
 // Imports
 import * as path from 'path';
 import * as winston from 'winston';
+import * as yargs from 'yargs';
 
 // Import configurations
-let config = require('./config').config;
+import { config as devConfig } from './config';
+import { config as prodConfig } from './config.prod';
 
-const argv = require('yargs').argv;
+const argv = yargs.argv;
 
+let config = devConfig;
 if (argv.prod) {
-  config = require('./config.prod').config;
+    config = prodConfig;
 }
 
 const logger = new (winston.Logger)({

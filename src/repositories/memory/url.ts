@@ -17,12 +17,12 @@ export class UrlRepository extends BaseRepository {
         return co(function*() {
 
             BaseRepository.collections.urls.push({
+                clicks: url.clicks,
                 id: BaseRepository.collections.urls.length + 1,
+                key,
                 name: url.name,
                 shortUrl: url.shortUrl,
                 url: url.url,
-                clicks: url.clicks,
-                key,
             });
 
             return true;

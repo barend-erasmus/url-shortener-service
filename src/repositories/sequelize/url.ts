@@ -25,9 +25,9 @@ export class UrlRepository extends BaseRepository {
 
             yield BaseRepository.models.Url.create({
                 name: url.name,
+                profileId: profile.id,
                 shortUrl: url.shortUrl,
                 url: url.url,
-                profileId: profile.id,
             });
 
             return true;
@@ -40,12 +40,12 @@ export class UrlRepository extends BaseRepository {
             yield BaseRepository.sequelize.authenticate();
 
             const existingUrl = yield BaseRepository.models.Url.find({
-                where: {
-                    shortUrl: url.shortUrl,
-                },
                 include: [
                     { model: BaseRepository.models.Click, required: false },
                 ],
+                where: {
+                    shortUrl: url.shortUrl,
+                },
             });
 
             for (const click of url.clicks) {
@@ -54,10 +54,10 @@ export class UrlRepository extends BaseRepository {
                 }
 
                 yield BaseRepository.models.Click.create({
-                    referer: click.referer,
-                    userAgent: click.userAgent,
                     acceptLanguage: click.acceptLanguage,
+                    referer: click.referer,
                     urlId: existingUrl.id,
+                    userAgent: click.userAgent,
                 });
             }
 
@@ -70,12 +70,12 @@ export class UrlRepository extends BaseRepository {
         return co(function*() {
 
             const url = yield BaseRepository.models.Url.find({
-                where: {
-                    shortUrl,
-                },
                 include: [
                     { model: BaseRepository.models.Click, required: false },
                 ],
+                where: {
+                    shortUrl,
+                },
             });
 
             if (!url) {

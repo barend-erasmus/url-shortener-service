@@ -5,16 +5,71 @@ export class BaseRepository {
     protected static sequelize: Sequelize.Sequelize = null;
     protected static models: { Profile: Sequelize.Model<{}, {}>, Url: Sequelize.Model<{}, {}>, Click: Sequelize.Model<{}, {}> } = null;
 
+    private static defineModels(): void {
+        const Profile = BaseRepository.sequelize.define('profile', {
+            key: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+            name: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+        });
+
+        const Url = BaseRepository.sequelize.define('url', {
+            name: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+            shortUrl: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+            url: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+        });
+
+        const Click = BaseRepository.sequelize.define('click', {
+            acceptLanguage: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+            referer: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+            userAgent: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+        });
+
+        Profile.hasMany(Url);
+        Url.belongsTo(Profile);
+
+        Url.hasMany(Click);
+        Click.belongsTo(Url);
+
+        this.models = {
+            Click,
+            Profile,
+            Url,
+        };
+    }
+
     constructor(private host: string, private username: string, private password: string) {
 
         if (!BaseRepository.sequelize) {
             BaseRepository.sequelize = new Sequelize('url-shortener-db', username, password, {
-                host,
                 dialect: 'postgres',
+                host,
                 pool: {
+                    idle: 10000,
                     max: 5,
                     min: 0,
-                    idle: 10000,
                 },
             });
 
@@ -34,58 +89,4 @@ export class BaseRepository {
         BaseRepository.sequelize.close();
     }
 
-    private static defineModels(): void {
-        const Profile = BaseRepository.sequelize.define('profile', {
-            name: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            key: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-        });
-
-        const Url = BaseRepository.sequelize.define('url', {
-            name: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            shortUrl: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            url: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-        });
-
-        const Click = BaseRepository.sequelize.define('click', {
-            referer: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            userAgent: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            acceptLanguage: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-        });
-
-        Profile.hasMany(Url);
-        Url.belongsTo(Profile);
-
-        Url.hasMany(Click);
-        Click.belongsTo(Url);
-
-        this.models = {
-            Profile,
-            Url,
-            Click,
-        };
-    }
 }
