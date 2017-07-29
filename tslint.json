@@ -5,6 +5,7 @@
     "quotemark": "single",
     "max-line-length": 150,
     "no-this-assignment": false,
-    "space-before-function-paren": false
+    "space-before-function-paren": false,
+    "no-unused-expression": false
   }
 }
