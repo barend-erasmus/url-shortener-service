@@ -21,7 +21,6 @@
   "homepage": "https://github.com/barend-erasmus/url-shortener-service#readme",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "co": "^4.6.0",
     "cors": "^2.8.4",
     "express": "^4.15.3",
     "express-winston": "^2.4.0",
@@ -39,7 +38,6 @@
     "@types/node": "^8.0.17",
     "@types/sequelize": "^4.0.66",
     "chai": "^4.1.0",
-    "co-mocha": "^1.2.0",
     "mocha": "^3.4.2"
   }
 }
