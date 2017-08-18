@@ -1,6 +1,3 @@
-// Imports
-import * as co from 'co';
-
 // Imports models
 import { Profile } from './../entities/profile';
 
@@ -12,33 +9,27 @@ export class ProfileService {
 
     }
 
-    public get(key: string): Promise<Profile> {
-        const self = this;
-        return co(function* () {
-            if (!key) {
-                throw new Error('Key required.');
-            }
+    public async get(key: string): Promise<Profile> {
+        if (!key) {
+            throw new Error('Key required.');
+        }
 
-            const profile = yield self.profileRepository.find(key);
+        const profile = await this.profileRepository.find(key);
 
-            return profile;
-        });
+        return profile;
     }
 
-    public create(name: string): Promise<Profile> {
-        const self = this;
-        return co(function* () {
+    public async create(name: string): Promise<Profile> {
 
-            if (!name) {
-                throw new Error('Name required.');
-            }
+        if (!name) {
+            throw new Error('Name required.');
+        }
 
-            const profile = new Profile(name, self.generateKey());
+        const profile = new Profile(name, this.generateKey());
 
-            yield self.profileRepository.insert(profile);
+        await this.profileRepository.insert(profile);
 
-            return profile;
-        });
+        return profile;
     }
 
     private generateKey() {

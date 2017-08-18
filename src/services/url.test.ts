@@ -1,6 +1,5 @@
 // Imports
 import { assert, expect } from 'chai';
-import 'co-mocha';
 import 'mocha';
 
 // Imports repositories
@@ -32,11 +31,11 @@ describe('UrlService.create', () => {
         profileService = new ProfileService(profileRepository);
     });
 
-    it('should throw error given name null', function* () {
+    it('should throw error given name null', async () => {
 
         try {
-            const profile: Profile = yield profileService.create('name1');
-            const url: Url = yield urlService.create(null, 'shortUrl1', 'url1', profile.key);
+            const profile: Profile = await profileService.create('name1');
+            const url: Url = await urlService.create(null, 'shortUrl1', 'url1', profile.key);
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -44,11 +43,11 @@ describe('UrlService.create', () => {
         }
     });
 
-    it('should throw error given shortUrl null', function* () {
+    it('should throw error given shortUrl null', async () => {
 
         try {
-            const profile: Profile = yield profileService.create('name1');
-            const url: Url = yield urlService.create('name', null, 'url1', profile.key);
+            const profile: Profile = await profileService.create('name1');
+            const url: Url = await urlService.create('name', null, 'url1', profile.key);
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -56,11 +55,11 @@ describe('UrlService.create', () => {
         }
     });
 
-    it('should throw error given url null', function* () {
+    it('should throw error given url null', async () => {
 
         try {
-            const profile: Profile = yield profileService.create('name1');
-            const url: Url = yield urlService.create('name', 'shortUrl1', null, profile.key);
+            const profile: Profile = await profileService.create('name1');
+            const url: Url = await urlService.create('name', 'shortUrl1', null, profile.key);
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -68,10 +67,10 @@ describe('UrlService.create', () => {
         }
     });
 
-    it('should throw error given key null', function* () {
+    it('should throw error given key null', async () => {
 
         try {
-            const url: Url = yield urlService.create('name', 'shortUrl1', 'url1', null);
+            const url: Url = await urlService.create('name', 'shortUrl1', 'url1', null);
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -79,11 +78,11 @@ describe('UrlService.create', () => {
         }
     });
 
-    it('should throw error given invalid shortUrl', function* () {
+    it('should throw error given invalid shortUrl', async () => {
 
         try {
-            const profile: Profile = yield profileService.create('name1');
-            const url: Url = yield urlService.create('name', '$$$', 'url1', profile.key);
+            const profile: Profile = await profileService.create('name1');
+            const url: Url = await urlService.create('name', '$$$', 'url1', profile.key);
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -91,12 +90,12 @@ describe('UrlService.create', () => {
         }
     });
 
-    it('should throw error given existing shortUrl', function* () {
+    it('should throw error given existing shortUrl', async () => {
 
         try {
-            const profile: Profile = yield profileService.create('name1');
-            yield urlService.create('name', 'shortUrl1', 'url1', profile.key);
-            const url: Url = yield urlService.create('name', 'shortUrl1', 'url1', profile.key);
+            const profile: Profile = await profileService.create('name1');
+            await urlService.create('name', 'shortUrl1', 'url1', profile.key);
+            const url: Url = await urlService.create('name', 'shortUrl1', 'url1', profile.key);
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -104,10 +103,10 @@ describe('UrlService.create', () => {
         }
     });
 
-    it('should throw error given non existing key', function* () {
+    it('should throw error given non existing key', async () => {
 
         try {
-            const url: Url = yield urlService.create('name', 'shortUrl1', 'url1', 'non-existing-key');
+            const url: Url = await urlService.create('name', 'shortUrl1', 'url1', 'non-existing-key');
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -115,9 +114,9 @@ describe('UrlService.create', () => {
         }
     });
 
-    it('should return url', function* () {
-        const profile: Profile = yield profileService.create('name1');
-        const url: Url = yield urlService.create('name1', 'shortUrl1', 'url1', profile.key);
+    it('should return url', async () => {
+        const profile: Profile = await profileService.create('name1');
+        const url: Url = await urlService.create('name1', 'shortUrl1', 'url1', profile.key);
 
         expect(url).to.be.not.null;
     });
@@ -141,10 +140,10 @@ describe('UrlService.get', () => {
         profileService = new ProfileService(profileRepository);
     });
 
-    it('should throw error given shortUrl null', function* () {
+    it('should throw error given shortUrl null', async () => {
 
         try {
-            const url: Url = yield urlService.get(null);
+            const url: Url = await urlService.get(null);
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -152,19 +151,19 @@ describe('UrlService.get', () => {
         }
     });
 
-    it('should return null given non existing shortUrl', function* () {
+    it('should return null given non existing shortUrl', async () => {
 
-        const url: Url = yield urlService.get('non-existing-short-url');
+        const url: Url = await urlService.get('non-existing-short-url');
 
         expect(url).to.be.null;
     });
 
-    it('should return url given existing shortUrl', function* () {
+    it('should return url given existing shortUrl', async () => {
 
-        const profile: Profile = yield profileService.create('name1');
-        yield urlService.create('name1', 'shortUrl1', 'url1', profile.key);
+        const profile: Profile = await profileService.create('name1');
+        await urlService.create('name1', 'shortUrl1', 'url1', profile.key);
 
-        const url: Url = yield urlService.get('shortUrl1');
+        const url: Url = await urlService.get('shortUrl1');
 
         expect(url).to.be.not.null;
     });
@@ -187,10 +186,10 @@ describe('UrlService.getWithClick', () => {
         profileService = new ProfileService(profileRepository);
     });
 
-    it('should throw error given shortUrl null', function* () {
+    it('should throw error given shortUrl null', async () => {
 
         try {
-            const url: Url = yield urlService.getWithClick(null, 'referer1', 'userAgent1', 'acceptLanguage1');
+            const url: Url = await urlService.getWithClick(null, 'referer1', 'userAgent1', 'acceptLanguage1');
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -198,19 +197,19 @@ describe('UrlService.getWithClick', () => {
         }
     });
 
-    it('should return null given non existing shortUrl', function* () {
+    it('should return null given non existing shortUrl', async () => {
 
-        const url: Url = yield urlService.getWithClick('non-existing-short-url', 'referer1', 'userAgent1', 'acceptLanguage1');
+        const url: Url = await urlService.getWithClick('non-existing-short-url', 'referer1', 'userAgent1', 'acceptLanguage1');
 
         expect(url).to.be.null;
     });
 
-    it('should return url given existing shortUrl', function* () {
+    it('should return url given existing shortUrl', async () => {
 
-        const profile: Profile = yield profileService.create('name1');
-        yield urlService.create('name1', 'shortUrl1', 'url1', profile.key);
+        const profile: Profile = await profileService.create('name1');
+        await urlService.create('name1', 'shortUrl1', 'url1', profile.key);
 
-        const url: Url = yield urlService.getWithClick('shortUrl1', 'referer1', 'userAgent1', 'acceptLanguage1');
+        const url: Url = await urlService.getWithClick('shortUrl1', 'referer1', 'userAgent1', 'acceptLanguage1');
 
         expect(url).to.be.not.null;
     });

@@ -1,5 +1,4 @@
 // Imports
-import * as co from 'co';
 import { BaseRepository } from './base';
 
 // Imports models
@@ -11,30 +10,22 @@ export class ProfileRepository extends BaseRepository {
         super();
     }
 
-    public insert(profile: Profile): Promise<boolean> {
-        const self = this;
-        return co(function*() {
-
-            BaseRepository.collections.profiles.push({
-                key: profile.key,
-                name: profile.name,
-            });
-
-            return true;
+    public async insert(profile: Profile): Promise<boolean> {
+        BaseRepository.collections.profiles.push({
+            key: profile.key,
+            name: profile.name,
         });
+
+        return true;
     }
 
-    public find(key: string): Promise<Profile> {
-        const self = this;
-        return co(function*() {
+    public async find(key: string): Promise<Profile> {
+        const profile = BaseRepository.collections.profiles.find((x) => x.key === key);
 
-            const profile = BaseRepository.collections.profiles.find((x) => x.key === key);
+        if (!profile) {
+            return null;
+        }
 
-            if (!profile) {
-                return null;
-            }
-
-            return new Profile(profile.name, profile.key);
-        });
+        return new Profile(profile.name, profile.key);
     }
 }

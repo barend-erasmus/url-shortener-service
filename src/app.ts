@@ -15,16 +15,7 @@ import { UrlRouter } from './routes/url';
 // Imports logger
 import { logger } from './logger';
 
-// Import configurations
-import { config as devConfig } from './config';
-import { config as prodConfig } from './config.prod';
-
 const argv = yargs.argv;
-
-let config = devConfig;
-if (argv.prod) {
-    config = prodConfig;
-}
 
 export class UrlShortenerServiceApi {
 

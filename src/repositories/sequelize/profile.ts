@@ -1,5 +1,4 @@
 // Imports
-import * as co from 'co';
 import { BaseRepository } from './base';
 
 // Imports models
@@ -11,35 +10,28 @@ export class ProfileRepository extends BaseRepository {
         super(host, username, password);
     }
 
-    public insert(profile: Profile): Promise<boolean> {
-        const self = this;
-        return co(function*() {
-            yield BaseRepository.sequelize.authenticate();
+    public async insert(profile: Profile): Promise<boolean> {
+        await BaseRepository.sequelize.authenticate();
 
-            yield BaseRepository.models.Profile.create({
-                key: profile.key,
-                name: profile.name,
-            });
-
-            return true;
+        await BaseRepository.models.Profile.create({
+            key: profile.key,
+            name: profile.name,
         });
+
+        return true;
     }
 
-    public find(key: string): Promise<Profile> {
-        const self = this;
-        return co(function*() {
-
-            const profile = yield BaseRepository.models.Profile.find({
-                where: {
-                    key,
-                },
-            });
-
-            if (!profile) {
-                return null;
-            }
-
-            return new Profile(profile.name, profile.key);
+    public async find(key: string): Promise<Profile> {
+        const profile: any = await BaseRepository.models.Profile.find({
+            where: {
+                key,
+            },
         });
+
+        if (!profile) {
+            return null;
+        }
+
+        return new Profile(profile.name, profile.key);
     }
 }

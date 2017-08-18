@@ -1,5 +1,4 @@
 // Imports
-import * as co from 'co';
 import { Express, Request, Response } from "express";
 import * as express from 'express';
 
@@ -37,21 +36,18 @@ export class ProfileRouter {
      *          "message": "Your request was not understood"
      *      }
      */
-    public static get(req: Request, res: Response, next: () => void) {
-        co(function*() {
+    public static async get(req: Request, res: Response, next: () => void) {
+        try {
 
-            try {
+            const profile: Profile = await BaseRouter.profileService().get(req.query.key);
 
-                const profile: Profile = yield BaseRouter.profileService().get(req.query.key);
+            res.json(profile);
 
-                res.json(profile);
-
-            } catch (err) {
-                res.status(400).json({
-                    message: err.message,
-                });
-            }
-        });
+        } catch (err) {
+            res.status(400).json({
+                message: err.message,
+            });
+        }
     }
 
     /**
@@ -78,19 +74,17 @@ export class ProfileRouter {
      *          "message": "Your request was not understood"
      *      }
      */
-    public static post(req: Request, res: Response, next: () => void) {
-        co(function*() {
+    public static async post(req: Request, res: Response, next: () => void) {
 
-            try {
-                const profile: Profile = yield BaseRouter.profileService().create(req.body.name);
+        try {
+            const profile: Profile = await BaseRouter.profileService().create(req.body.name);
 
-                res.json(profile);
+            res.json(profile);
 
-            } catch (err) {
-                res.status(400).json({
-                    message: err.message,
-                });
-            }
-        });
+        } catch (err) {
+            res.status(400).json({
+                message: err.message,
+            });
+        }
     }
 }

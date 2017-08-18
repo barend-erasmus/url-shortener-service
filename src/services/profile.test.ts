@@ -1,6 +1,5 @@
 // Imports
 import { assert, expect } from 'chai';
-import 'co-mocha';
 import 'mocha';
 
 // Imports repositories
@@ -24,10 +23,10 @@ describe('ProfileService.create', () => {
         profileService = new ProfileService(profileRepository);
     });
 
-    it('should throw error given name null', function* () {
+    it('should throw error given name null', async () => {
 
         try {
-            const profile: Profile = yield profileService.create(null);
+            const profile: Profile = await profileService.create(null);
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -35,23 +34,23 @@ describe('ProfileService.create', () => {
         }
     });
 
-    it('should return profile', function* () {
+    it('should return profile', async () => {
 
-        const profile: Profile = yield profileService.create('name1');
+        const profile: Profile = await profileService.create('name1');
 
         expect(profile).to.be.not.null;
     });
 
-    it('should return profile with key', function* () {
+    it('should return profile with key', async () => {
 
-        const profile: Profile = yield profileService.create('name1');
+        const profile: Profile = await profileService.create('name1');
 
         expect(profile.key).to.be.not.null;
     });
 
-    it('should return profile with name', function* () {
+    it('should return profile with name', async () => {
 
-        const profile: Profile = yield profileService.create('name1');
+        const profile: Profile = await profileService.create('name1');
 
         expect(profile.name).to.be.not.null;
     });
@@ -69,10 +68,10 @@ describe('ProfileService.get', () => {
         profileService = new ProfileService(profileRepository);
     });
 
-    it('should throw error given key null', function* () {
+    it('should throw error given key null', async () => {
 
         try {
-            const profile: Profile = yield profileService.get(null);
+            const profile: Profile = await profileService.get(null);
 
             throw new Error('Expected Error');
         } catch (err) {
@@ -80,17 +79,17 @@ describe('ProfileService.get', () => {
         }
     });
 
-    it('should return null given non existing key', function* () {
+    it('should return null given non existing key', async () => {
 
-        const profile: Profile = yield profileService.get('non-existing-key');
+        const profile: Profile = await profileService.get('non-existing-key');
 
         expect(profile).to.be.null;
     });
 
-    it('should return profile given existing key', function* () {
+    it('should return profile given existing key', async () => {
 
-        const existingProfile: Profile = yield profileService.create('name1');
-        const profile: Profile = yield profileService.get(existingProfile.key);
+        const existingProfile: Profile = await profileService.create('name1');
+        const profile: Profile = await profileService.get(existingProfile.key);
 
         expect(profile).to.be.not.null;
     });

@@ -1,5 +1,4 @@
 // Imports
-import * as co from 'co';
 import { BaseRepository } from './base';
 
 // Imports models
@@ -12,45 +11,34 @@ export class UrlRepository extends BaseRepository {
         super();
     }
 
-    public insert(url: Url, key: string): Promise<boolean> {
-        const self = this;
-        return co(function*() {
-
-            BaseRepository.collections.urls.push({
-                clicks: url.clicks,
-                id: BaseRepository.collections.urls.length + 1,
-                key,
-                name: url.name,
-                shortUrl: url.shortUrl,
-                url: url.url,
-            });
-
-            return true;
+    public async insert(url: Url, key: string): Promise<boolean> {
+        BaseRepository.collections.urls.push({
+            clicks: url.clicks,
+            id: BaseRepository.collections.urls.length + 1,
+            key,
+            name: url.name,
+            shortUrl: url.shortUrl,
+            url: url.url,
         });
+
+        return true;
     }
 
-    public update(url: Url): Promise<boolean> {
-        const self = this;
-        return co(function*() {
-            const existingUrl = BaseRepository.collections.urls.find((x) => x.shortUrl === url.shortUrl);
+    public async update(url: Url): Promise<boolean> {
+        const existingUrl = BaseRepository.collections.urls.find((x) => x.shortUrl === url.shortUrl);
 
-            existingUrl.clicks = url.clicks;
+        existingUrl.clicks = url.clicks;
 
-            return true;
-        });
+        return true;
     }
 
-    public find(shortUrl: string): Promise<Url> {
-        const self = this;
-        return co(function*() {
+    public async find(shortUrl: string): Promise<Url> {
+        const url = BaseRepository.collections.urls.find((x) => x.shortUrl === shortUrl);
 
-            const url = BaseRepository.collections.urls.find((x) => x.shortUrl === shortUrl);
+        if (!url) {
+            return null;
+        }
 
-            if (!url) {
-                return null;
-            }
-
-            return new Url(url.name, url.shortUrl, url.url, url.clicks);
-        });
+        return new Url(url.name, url.shortUrl, url.url, url.clicks);
     }
 }

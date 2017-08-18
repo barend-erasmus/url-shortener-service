@@ -1,5 +1,4 @@
 // Imports
-import * as co from 'co';
 import { Express, Request, Response } from "express";
 import * as express from 'express';
 
@@ -44,21 +43,18 @@ export class UrlRouter {
      *          "message": "Your request was not understood"
      *      }
      */
-    public static get(req: Request, res: Response, next: () => void) {
-        co(function*() {
+    public static async get(req: Request, res: Response, next: () => void) {
+        try {
 
-            try {
+            const url: Url = await BaseRouter.urlService().get(req.query.shortUrl);
 
-                const url: Url = yield BaseRouter.urlService().get(req.query.shortUrl);
+            res.json(url);
 
-                res.json(url);
-
-            } catch (err) {
-                res.status(400).json({
-                    message: err.message,
-                });
-            }
-        });
+        } catch (err) {
+            res.status(400).json({
+                message: err.message,
+            });
+        }
     }
 
     /**
@@ -95,41 +91,35 @@ export class UrlRouter {
      *          "message": "Your request was not understood"
      *      }
      */
-    public static post(req: Request, res: Response, next: () => void) {
-        co(function*() {
+    public static async post(req: Request, res: Response, next: () => void) {
+        try {
 
-            try {
+            const url: Url = await BaseRouter.urlService().create(req.body.name, req.body.shortUrl, req.body.url, req.body.key);
 
-                const url: Url = yield BaseRouter.urlService().create(req.body.name, req.body.shortUrl, req.body.url, req.body.key);
+            res.json(url);
 
-                res.json(url);
-
-            } catch (err) {
-                res.status(400).json({
-                    message: err.message,
-                });
-            }
-        });
+        } catch (err) {
+            res.status(400).json({
+                message: err.message,
+            });
+        }
     }
 
-    public static redirect(req: Request, res: Response, next: () => void) {
-        co(function*() {
+    public static async redirect(req: Request, res: Response, next: () => void) {
+        try {
 
-            try {
+            const referer: any = req.headers.referer || 'None';
+            const acceptLanguage: any = req.headers['accept-language'];
+            const userAgent: any = req.headers['user-agent'];
 
-                const referer: any = req.headers.referer || 'None';
-                const acceptLanguage: any = req.headers['accept-language'];
-                const userAgent: any = req.headers['user-agent'];
+            const url: Url = await BaseRouter.urlService().getWithClick(req.params.shortUrl, referer, userAgent, acceptLanguage);
 
-                const url: Url = yield BaseRouter.urlService().getWithClick(req.params.shortUrl, referer, userAgent, acceptLanguage);
+            res.redirect(301, url.url);
 
-                res.redirect(301, url.url);
-
-            } catch (err) {
-                res.status(400).json({
-                    message: err.message,
-                });
-            }
-        });
+        } catch (err) {
+            res.status(400).json({
+                message: err.message,
+            });
+        }
     }
 }
